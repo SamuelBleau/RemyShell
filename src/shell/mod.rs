@@ -11,4 +11,4 @@ mod command;
 
 pub use repl::Repl;
 pub use state::ShellState;
-pub use command::Command;
+pub use command::{Command, parse_command};
