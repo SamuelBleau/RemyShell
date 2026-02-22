@@ -10,5 +10,5 @@ mod state;
 mod dispatcher;
 
 pub use repl::Repl;
-pub use state::ShellState;
+pub use state::{ShellState};
 pub use dispatcher::{Dispatcher, DispatchResult};

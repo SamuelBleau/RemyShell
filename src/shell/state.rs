@@ -21,4 +21,20 @@ impl ShellState {
             env: std::env::vars().collect(),
         }
     }
+
+    pub fn change_directory(&mut self, path: &str) -> Result<(), String> {
+        let target = if path.is_empty() {
+            std::env::var("HOME")
+                .map(PathBuf::from)
+                .unwrap_or_else(|_| PathBuf::from("/"))
+        } else {
+            PathBuf::from(path)
+        };
+
+        std::env::set_current_dir(&target)
+            .map_err(|e| format!("cd: {}: {}", target.display(), e))?;
+
+        self.cwd = target;
+        Ok(())
+    }
 }
