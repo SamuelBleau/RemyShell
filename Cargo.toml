@@ -3,6 +3,17 @@ name = "remyshell"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+name = "remyshell"
+path = "src/lib.rs"
+
+[[bin]]
+name = "remyshell"
+path = "src/main.rs"
+
 [dependencies]
 anyhow = "1.0"
 thiserror = "2.0.18"
+
+[dev-dependencies]
+# Coverage is installed via cargo-tarpaulin: cargo install cargo-tarpaulin

@@ -5,10 +5,18 @@
 // File: main.rs
 // Description: Entry point for the RemyShell application
 
-mod shell;
+use remyshell::shell;
+use std::io::{self, BufReader};
 
-fn main() {
+fn main() -> anyhow::Result<()> {
     println!("Welcome to RemyShell!");
-    let shell = shell::Repl::new();
-    let _ = shell.run();
+
+    let stdin = io::stdin();
+    let reader = BufReader::new(stdin.lock());
+    let stdout = io::stdout();
+
+    let mut repl = shell::Repl::new(reader, stdout);
+    repl.run()?;
+
+    Ok(())
 }
