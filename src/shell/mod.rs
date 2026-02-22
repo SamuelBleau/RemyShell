@@ -6,5 +6,9 @@
 // Description: Shell module providing core shell functionality
 
 mod repl;
+mod state;
+mod command;
 
 pub use repl::Repl;
+pub use state::ShellState;
+pub use command::{Command, parse_command};
