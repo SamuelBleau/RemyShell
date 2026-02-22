@@ -2,9 +2,11 @@
 // Copyright (c) 2026 Samuel Bleau
 // Licensed under the MIT License - see LICENSE file for details
 //
-// File: shell/mod.rs
-// Description: Shell module providing core shell functionality
+// File: lib.rs
+// Description: Library exports for RemyShell
 
-mod repl;
+pub mod shell;
+pub mod config;
+pub mod runtime;
+pub mod sys;
 
-pub use repl::Repl;
