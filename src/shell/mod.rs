@@ -5,4 +5,6 @@
 // File: shell/mod.rs
 // Description: Shell module providing core shell functionality
 
+mod repl;
 
+pub use repl::Repl;

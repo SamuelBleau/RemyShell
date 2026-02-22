@@ -5,7 +5,10 @@
 // File: main.rs
 // Description: Entry point for the RemyShell application
 
+mod shell;
 
 fn main() {
     println!("Welcome to RemyShell!");
+    let shell = shell::Repl::new();
+    let _ = shell.run();
 }
