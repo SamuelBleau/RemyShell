@@ -6,17 +6,22 @@
 // Description: Read-Eval-Print Loop implementation for the shell
 
 use std::io::{Write, BufRead};
+use crate::shell::ShellState;
+use crate::shell::Command;
+use crate::shell::command::parse_command;
 
 pub struct Repl<R: BufRead, W: Write> {
     input: R,
     output: W,
+    state: ShellState
 }
 
 impl<R: BufRead, W: Write> Repl<R, W> {
     pub fn new(input: R, output: W) -> Self {
         Repl {
             input,
-            output
+            output,
+            state: ShellState::new(),
         }
     }
 
@@ -25,16 +30,17 @@ impl<R: BufRead, W: Write> Repl<R, W> {
             self.print_prompt()?;
             let input = self.read_input()?;
 
-            if input.is_empty() {
-                continue;
+            match parse_command(&input) {
+                Command::Exit => {
+                    writeln!(self.output, "Goodbye little rat!")?;
+                    break;
+                }
+                Command::Empty => continue,
+                Command::Raw(cmd) => {
+                    writeln!(self.output, "{cmd}")?;
+                    self.state.last_status = 0;
+                }
             }
-
-            if input == "exit" {
-                writeln!(self.output, "Goodbye little rat!")?;
-                break;
-            }
-
-            writeln!(self.output, "{}", input)?;
         }
         Ok(())
     }
