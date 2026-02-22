@@ -34,7 +34,9 @@ impl ShellState {
         std::env::set_current_dir(&target)
             .map_err(|e| format!("cd: {}: {}", target.display(), e))?;
 
-        self.cwd = target;
+        self.cwd = std::env::current_dir()
+            .map_err(|e| format!("cd: failed to get current directory: {}", e))?;
+
         Ok(())
     }
 }

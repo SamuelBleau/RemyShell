@@ -48,7 +48,7 @@ impl<R: BufRead, W: Write> Repl<R, W> {
     }
 
     fn print_prompt(&mut self) -> anyhow::Result<()> {
-        write!(self.output, "> ")?;
+        write!(self.output, "{}> ", self.state.cwd.display())?;
         self.output.flush()?;
         Ok(())
     }
