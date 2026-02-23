@@ -7,13 +7,14 @@
 
 use std::io::{Write, BufRead};
 use crate::shell::ShellState;
-use crate::shell::Command;
-use crate::shell::command::parse_command;
+use crate::shell::dispatcher::DispatchResult;
+use crate::shell::dispatcher::Dispatcher;
 
 pub struct Repl<R: BufRead, W: Write> {
     input: R,
     output: W,
-    state: ShellState
+    state: ShellState,
+    dispatcher: Dispatcher
 }
 
 impl<R: BufRead, W: Write> Repl<R, W> {
@@ -22,6 +23,7 @@ impl<R: BufRead, W: Write> Repl<R, W> {
             input,
             output,
             state: ShellState::new(),
+            dispatcher: Dispatcher::new(),
         }
     }
 
@@ -29,16 +31,16 @@ impl<R: BufRead, W: Write> Repl<R, W> {
         loop {
             self.print_prompt()?;
             let input = self.read_input()?;
+            let result = self.dispatcher.dispatch(&input, &mut self.state);
 
-            match parse_command(&input) {
-                Command::Exit => {
+            match result {
+                DispatchResult::Continue => {}
+                DispatchResult::Exit => {
                     writeln!(self.output, "Goodbye little rat!")?;
-                    break;
-                }
-                Command::Empty => continue,
-                Command::Raw(cmd) => {
-                    writeln!(self.output, "{cmd}")?;
-                    self.state.last_status = 0;
+                    break
+                },
+                DispatchResult::Error(err) => {
+                    writeln!(self.output, "Error: {}", err)?;
                 }
             }
         }
@@ -46,7 +48,7 @@ impl<R: BufRead, W: Write> Repl<R, W> {
     }
 
     fn print_prompt(&mut self) -> anyhow::Result<()> {
-        write!(self.output, "> ")?;
+        write!(self.output, "{}> ", self.state.cwd.display())?;
         self.output.flush()?;
         Ok(())
     }

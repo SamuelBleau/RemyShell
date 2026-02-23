@@ -16,4 +16,5 @@ anyhow = "1.0"
 thiserror = "2.0.18"
 
 [dev-dependencies]
+once_cell = "1.19"
 # Coverage is installed via cargo-tarpaulin: cargo install cargo-tarpaulin

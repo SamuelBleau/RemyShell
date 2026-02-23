@@ -7,9 +7,8 @@
 
 mod repl;
 mod state;
-mod command;
 mod dispatcher;
 
 pub use repl::Repl;
-pub use state::ShellState;
-pub use command::{Command, parse_command};
+pub use state::{ShellState};
+pub use dispatcher::{Dispatcher, DispatchResult};
